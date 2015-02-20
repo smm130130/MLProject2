@@ -9,6 +9,7 @@ public class Main {
 		double lambda = 1.5;
 		String hamFolder = "D:/UTD/5thSemester/ML/HW/2/hw2_train/train/ham";
 		String spamFolder = "D:/UTD/5thSemester/ML/HW/2/hw2_train/train/spam";
+		String testFolder = "D:/UTD/5thSemester/ML/HW/2/hw2_test/test";
 		
 		BuildMatrix bm = new BuildMatrix();
 		Integer[][] data = bm.buildMatrix(hamFolder, spamFolder);
@@ -23,7 +24,11 @@ public class Main {
 		}
 		
 		Convergence con = new Convergence();
-		con.computeWeight(data, pr, w, eta, lambda);
+		Double[] weights = con.computeWeight(data, pr, w, eta, lambda);
+		
+		String[] allUniqueWords = bm.getAlluniqueWord();
+		TestClass tc = new TestClass();
+		tc.test(weights, allUniqueWords, testFolder);
 	}
 
 	private static double generateRandomNumber() {

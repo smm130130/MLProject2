@@ -13,7 +13,16 @@ public class BuildMatrix {
 	int spamUnique = 0;
 	int totalUnique = 0;
 	int totalDocs = 0;
-	
+	String[] alluniqueWord;
+
+	public String[] getAlluniqueWord() {
+		return alluniqueWord;
+	}
+
+	public void setAlluniqueWord(String[] alluniqueWord) {
+		this.alluniqueWord = alluniqueWord;
+	}
+
 	public int getHamUnique() {
 		return hamUnique;
 	}
@@ -63,6 +72,7 @@ public class BuildMatrix {
 		for (Map.Entry<String, Integer> entry : wordCount.entrySet()) {
 			allUniqueWords[i++] = entry.getKey();
 		}
+		setAlluniqueWord(allUniqueWords);
 		
 		Integer[][] data = new Integer[totalDocs][totalUnique+2];
 		data = pupulateTheMatrix(data, allUniqueWords, hamPath, "ham");
