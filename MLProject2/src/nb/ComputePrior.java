@@ -16,7 +16,7 @@ public class ComputePrior {
 		double hamPriorProb = (double)hamLength / totalCount;
 		double spamPriorProb = (double)spamLength / totalCount;
 		
-		System.out.println(hamLength + " "+ spamLength + "=" + totalCount + " , "+ hamPriorProb + " , "+spamPriorProb);
+		//System.out.println(hamLength + " "+ spamLength + "=" + totalCount + " , "+ hamPriorProb + " , "+spamPriorProb);
 		//getDirectLength(hamPath, spamPath);
 		HashMap<String, Double> priorProb = new HashMap<>();
 		priorProb.put("ham", hamPriorProb);

@@ -1,5 +1,6 @@
 package nb;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
@@ -7,7 +8,12 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class TestClass {
-	public void findClass(HashMap<String, Object> hamHashMap, HashMap<String, Object> spamHashMap, HashMap<String, Double> priorProb, String path) {
+	BufferedWriter writer = null;
+	public TestClass(BufferedWriter bw) {
+		writer = bw;
+	}
+
+	public void findClass(HashMap<String, Object> hamHashMap, HashMap<String, Object> spamHashMap, HashMap<String, Double> priorProb, String path, String className) {
 		
 		int hamClasses = 0, spamClasses = 0;
 		double hamPrior = priorProb.get("ham");
@@ -49,7 +55,7 @@ public class TestClass {
 				spamClasses++;
 			}
 		}
-		
+		calculateAccuracy(hamClasses, spamClasses, path, className);
 		System.out.println(path + " : hamClasses = "+ hamClasses + " spamClasses = "+ spamClasses);
 	}
 
@@ -69,5 +75,34 @@ public class TestClass {
 		
 		finalValue = priorLog + secondPartValue;
 		return finalValue;
+	}
+	
+
+
+	private void calculateAccuracy(int hamClasses, int spamClasses, String path, String className) {
+		int totalClasses = hamClasses + spamClasses;
+		
+		double accuracy = 0.0;
+		if(className.equalsIgnoreCase("ham")) {
+			accuracy = (double) (hamClasses * 100.0) / totalClasses;
+		}
+		else if(className.equalsIgnoreCase("spam")) {
+			accuracy = (double) (spamClasses * 100.0) / totalClasses;
+		}
+		
+		try {
+			 
+			String content = "TESTING FOR "+className+" CLASS";
+			writer.newLine();
+			writer.write(content); writer.newLine();
+			writer.write("Total Files :" +totalClasses); writer.newLine();
+			writer.write("HAM :" +hamClasses + " SPAM : "+ spamClasses); writer.newLine();
+			writer.write("Accuracy with repect to "+className+" class is :" +accuracy); writer.newLine();
+			writer.write("--------------------------------------------------------------");
+			writer.newLine();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
 	}
 }
