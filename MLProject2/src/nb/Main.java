@@ -9,6 +9,10 @@ import java.util.HashMap;
 public class Main {
 	public static void main(String[] args) throws IOException {
 		
+		for (int i = 0; i < args.length; i++) {
+	        System.out.println("Argument #" + i + " = " + args[i]);
+	    }
+		
 		String trainFolder = "D:/UTD/5thSemester/ML/HW/2/hw2_train/train";
 		String hamTrainFolder = trainFolder+"/ham";
 		String spamTrainFolder = trainFolder+"/spam";
