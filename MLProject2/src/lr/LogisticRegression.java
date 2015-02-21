@@ -56,7 +56,7 @@ public class LogisticRegression {
 		Double[] weights = con.computeWeight(data, pr, w, eta, lambda);
 		
 		String[] allUniqueWords = bm.getAlluniqueWord();
-		TestClass tc = new TestClass(bw);
+		TestClassLR tc = new TestClassLR(bw);
 		tc.test(weights, allUniqueWords, testFolder, false);
 		
 		System.out.println("TESTING WITH STOPWORD");
@@ -77,7 +77,7 @@ public class LogisticRegression {
 		Double[] weights1 = con1.computeWeight(data1, pr1, w1, eta, lambda);
 		
 		String[] allUniqueWords1 = bm1.getAlluniqueWord();
-		TestClass tc1 = new TestClass(bw);
+		TestClassLR tc1 = new TestClassLR(bw);
 		tc1.test(weights1, allUniqueWords1, testFolder, true);
 		
 		System.out.println("File in folder : "+ file.getAbsolutePath());

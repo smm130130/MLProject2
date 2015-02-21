@@ -7,10 +7,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class TestClass {
+public class TestClassLR {
 	BufferedWriter writer = null;
 	BuildMatrix bMatrix = new BuildMatrix();
-	public TestClass(BufferedWriter bw) {
+	public TestClassLR(BufferedWriter bw) {
 		writer = bw;
 	}
 

@@ -7,9 +7,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public class TestClass {
+public class TestClassNB {
 	BufferedWriter writer = null;
-	public TestClass(BufferedWriter bw) {
+	public TestClassNB(BufferedWriter bw) {
 		writer = bw;
 	}
 

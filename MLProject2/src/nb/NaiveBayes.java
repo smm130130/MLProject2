@@ -48,7 +48,7 @@ public class NaiveBayes {
 		HashMap<String, Object> hamHashMap =  rs.readFile(hamTrainFolder, false);
 		HashMap<String, Object> spamHashMap =  rs.readFile(spamTrainFolder, false);
 		
-		TestClass tc = new TestClass(bw);
+		TestClassNB tc = new TestClassNB(bw);
 		tc.findClass(hamHashMap, spamHashMap, priorProb, hamTestFolder, "ham");
 		tc.findClass(hamHashMap, spamHashMap, priorProb, spamTestFolder, "spam");
 		
@@ -58,7 +58,7 @@ public class NaiveBayes {
 		HashMap<String, Object> hamHashMap1 =  rs.readFile(hamTrainFolder, true);
 		HashMap<String, Object> spamHashMap1 =  rs.readFile(spamTrainFolder, true);
 		
-		TestClass tc1 = new TestClass(bw);
+		TestClassNB tc1 = new TestClassNB(bw);
 		tc1.findClass(hamHashMap1, spamHashMap1, priorProb, hamTestFolder, "ham");
 		tc1.findClass(hamHashMap1, spamHashMap1, priorProb, spamTestFolder, "spam");
 		
