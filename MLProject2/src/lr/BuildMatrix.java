@@ -55,16 +55,16 @@ public class BuildMatrix {
 		this.totalDocs = totalDocs;
 	}
 	
-	public Integer[][] buildMatrix(String hamPath, String spamPath) {
+	public Integer[][] buildMatrix(String hamPath, String spamPath, boolean stopword) {
 		int totalDocs = getDirectLength(hamPath, spamPath);
 		setTotalDocs(totalDocs);
-		System.out.println("Total : "+ totalDocs);
+		//System.out.println("Total : "+ totalDocs);
 		
-		int hamUnique = getNumUniqueAttributes(hamPath);
-		int spamUnique = getNumUniqueAttributes(spamPath);
+		int hamUnique = getNumUniqueAttributes(hamPath, stopword);
+		int spamUnique = getNumUniqueAttributes(spamPath, stopword);
 		int totalUnique = hamUnique + spamUnique;
 		setHamUnique(hamUnique); setSpamUnique(spamUnique); setTotalUnique(totalUnique);
-		System.out.println("toalUnique :  "+ totalUnique);
+		//System.out.println("toalUnique :  "+ totalUnique);
 		
 		
 		String [] allUniqueWords = new String[totalUnique];
@@ -75,13 +75,13 @@ public class BuildMatrix {
 		setAlluniqueWord(allUniqueWords);
 		
 		Integer[][] data = new Integer[totalDocs][totalUnique+2];
-		data = pupulateTheMatrix(data, allUniqueWords, hamPath, "ham");
-		data = pupulateTheMatrix(data, allUniqueWords, spamPath, "spam");
+		data = pupulateTheMatrix(data, allUniqueWords, hamPath, "ham", stopword);
+		data = pupulateTheMatrix(data, allUniqueWords, spamPath, "spam", stopword);
 		
 		return data;
 	}
 
-	private Integer[][] pupulateTheMatrix(Integer[][] data, String[] allUniqueWords, String hamPath, String hamOrspam) {		
+	private Integer[][] pupulateTheMatrix(Integer[][] data, String[] allUniqueWords, String hamPath, String hamOrspam, boolean stopword) {		
 		
 		HashMap<String, Integer> wordCountIndividual = new HashMap<>();
 		File[] files = new File(hamPath).listFiles();
@@ -94,10 +94,12 @@ public class BuildMatrix {
 				while(fileScanner.hasNext()) {
 					String first = fileScanner.next();
 					if(first.matches("[a-zA-Z]+")) {
-						if (wordCountIndividual.containsKey(first)) {
-							wordCountIndividual.put(first, wordCountIndividual.get(first)+1);
-						} else { 
-							wordCountIndividual.put(first,1);
+						if(checkStopWord(first, stopword)) {
+							if (wordCountIndividual.containsKey(first)) {
+								wordCountIndividual.put(first, wordCountIndividual.get(first)+1);
+							} else { 
+								wordCountIndividual.put(first,1);
+							}
 						}
 					}
 				}
@@ -141,7 +143,7 @@ public class BuildMatrix {
 		return hamLength + spamLength;
 	}
 	
-	public int getNumUniqueAttributes(String path) {
+	public int getNumUniqueAttributes(String path, boolean stopword) {
 		
 		int noOfTotalWordsCount = 0, noOfUniqueWordsCount = 0;
 		File[] files = new File(path).listFiles();
@@ -154,12 +156,14 @@ public class BuildMatrix {
 				while(fileScanner.hasNext()) {
 					String first = fileScanner.next();
 					if(first.matches("[a-zA-Z]+")) {
-						noOfTotalWordsCount++;
-						if (wordCount.containsKey(first)) {
-							wordCount.put(first, wordCount.get(first)+1);
-						} else { 
-							noOfUniqueWordsCount++;
-							wordCount.put(first,1);
+						if(checkStopWord(first, stopword)) {
+							noOfTotalWordsCount++;
+							if (wordCount.containsKey(first)) {
+								wordCount.put(first, wordCount.get(first)+1);
+							} else { 
+								noOfUniqueWordsCount++;
+								wordCount.put(first,1);
+							}	
 						}
 					}
 				}
@@ -169,7 +173,33 @@ public class BuildMatrix {
 				fileScanner.close();
 			}
 		}
-		System.out.println("total in a folder which is not required : "+ noOfTotalWordsCount);
+		//System.out.println("total in a folder which is not required : "+ noOfTotalWordsCount);
 		return noOfUniqueWordsCount;
+	}
+	
+	public boolean checkStopWord(String checkWord, boolean stopword) {
+		if(stopword) {
+			String word = checkWord;
+			File textFile = new File("resource/stopwords.txt");
+			Scanner fileScanner = null;
+			try {
+				fileScanner = new Scanner(textFile);
+				while(fileScanner.hasNext()) {
+					String first = fileScanner.next();
+					if(word.equalsIgnoreCase(first)) {
+						return false;
+					}
+				}
+			} 
+			catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} finally {
+				fileScanner.close();
+			}
+			return true;
+		}
+		else {
+			return true;
+		}
 	}
 }

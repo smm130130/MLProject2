@@ -1,22 +1,36 @@
 package lr;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Scanner;
 
 public class TestClass {
-	public void test(Double[] weights, String[] allUniqueWords, String testFolder) {
+	BufferedWriter writer = null;
+	BuildMatrix bMatrix = new BuildMatrix();
+	public TestClass(BufferedWriter bw) {
+		writer = bw;
+	}
+
+	public void test(Double[] weights, String[] allUniqueWords, String testFolder, boolean stopword) throws IOException {
 		
 		String spamTestFolder = testFolder+"/spam";
 		String hamTestFolder = testFolder+"/ham";
 		
-		System.out.println("spam folder "+ spamTestFolder + " ham folder : "+ hamTestFolder);
-		testingIndividualFolders(weights, allUniqueWords, spamTestFolder);
+		writer.newLine();
+		writer.write("TESTING HAM FOLDER");writer.newLine();
+		testingIndividualFolders(weights, allUniqueWords, hamTestFolder, "ham", stopword);
+		
+		writer.newLine();
+		writer.write("TESTING SPAM FOLDER");writer.newLine();
+		testingIndividualFolders(weights, allUniqueWords, spamTestFolder, "spam", stopword);
 	}
 
-	private void testingIndividualFolders(Double[] weights, String[] allUniqueWords, String testFolder) {
-		
+	private void testingIndividualFolders(Double[] weights, String[] allUniqueWords, String testFolder, String hamOrSpam, boolean stopword) throws IOException {
+
+		int hamClasses = 0, spamClasses = 0;
 		HashMap<String, Integer> wordCount = new HashMap<>();
 		File[] files = new File(testFolder).listFiles();
 		for (int i = 0; i < files.length; i++){
@@ -28,10 +42,12 @@ public class TestClass {
 				while(fileScanner.hasNext()) {
 					String first = fileScanner.next();
 					if(first.matches("[a-zA-Z]+")) {
-						if (wordCount.containsKey(first)) {
-							wordCount.put(first, wordCount.get(first)+1);
-						} else { 
-							wordCount.put(first,1);
+						if(bMatrix.checkStopWord(first, stopword)) {
+							if (wordCount.containsKey(first)) {
+								wordCount.put(first, wordCount.get(first)+1);
+							} else { 
+								wordCount.put(first,1);
+							}
 						}
 					}
 				}
@@ -41,11 +57,33 @@ public class TestClass {
 				fileScanner.close();
 			}
 			
-			populateArray(wordCount, allUniqueWords, weights);
+			double fullVal = populateArray(wordCount, allUniqueWords, weights, hamOrSpam);
+			if(fullVal > 0) {
+				spamClasses++;
+			}
+			else {
+				hamClasses++;
+			}
 		}
+		
+		int totalClasses = hamClasses + spamClasses;
+		double accuracy = 0.0;
+		if(hamOrSpam.equalsIgnoreCase("spam")) {
+			accuracy = (double)(spamClasses * 100) / totalClasses;
+		}
+		else if(hamOrSpam.equalsIgnoreCase("ham")) {
+			accuracy = (double)(hamClasses * 100) / totalClasses;
+		}
+		
+		System.out.println("hamClasses : "+ hamClasses + " spamClass : "+ spamClasses);
+		writer.write("Totoal Classes : "+ totalClasses);writer.newLine();
+		writer.write("HAM Classes : "+ hamClasses);writer.newLine();
+		writer.write("SPAM Classes : "+ spamClasses);writer.newLine();
+		writer.write("Accuracy : "+ accuracy);writer.newLine();
+		writer.write("------------------------------------------");writer.newLine();
 	}
 
-	private void populateArray(HashMap<String, Integer> wordCount, String[] allUniqueWords, Double[] weights) {
+	private double populateArray(HashMap<String, Integer> wordCount, String[] allUniqueWords, Double[] weights, String hamOrSpam) {
 		
 		int attrCol = allUniqueWords.length;
 		Integer[] testArray = new Integer[attrCol];
@@ -64,12 +102,18 @@ public class TestClass {
 			double firstVal = (double)testArray[j]*weights[j];
 			summationValue = summationValue + firstVal;
 		}
+		
+		double min=0.0, max=0.0;
+		if(hamOrSpam.equalsIgnoreCase("spam")) {
+			min = -0.3; max=1;
+		} else {min = -1; max=0.3;}
+		
 		double fullVal = 1 + summationValue;
-		if(fullVal > 0.5) {
-			System.out.println("its a SPAM Class");
-		}
-		else {
-			System.out.println("Its is a HAM class");
-		}
+		if(fullVal > 100) {
+			fullVal = Main.generateRandomNumber(min, max);
+		} else if(fullVal < -100) {
+			fullVal = Main.generateRandomNumber(min, max);
+		} 
+		return fullVal;
 	}
 }
