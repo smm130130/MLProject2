@@ -27,7 +27,7 @@ public class Main {
 		String spamTestFolder = testFolder+"/spam";
 		
 		BufferedWriter bw = null;
-		File file = new File("output.txt");
+		File file = new File("outputNB.txt");
 		try {
 			if (!file.exists()) {
 				file.createNewFile();
