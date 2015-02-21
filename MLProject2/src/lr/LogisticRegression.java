@@ -6,7 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Random;
 
-public class Main {
+public class LogisticRegression {
 	public static void main(String[] args) throws IOException {
 		
 		String[] arguments=new String[4];

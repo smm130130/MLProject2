@@ -6,7 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 
-public class Main {
+public class NaiveBayes {
 	public static void main(String[] args) throws IOException {
 		
 		String[] arguments=new String[2];

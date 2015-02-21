@@ -110,9 +110,9 @@ public class TestClass {
 		
 		double fullVal = 1 + summationValue;
 		if(fullVal > 100) {
-			fullVal = Main.generateRandomNumber(min, max);
+			fullVal = LogisticRegression.generateRandomNumber(min, max);
 		} else if(fullVal < -100) {
-			fullVal = Main.generateRandomNumber(min, max);
+			fullVal = LogisticRegression.generateRandomNumber(min, max);
 		} 
 		return fullVal;
 	}
