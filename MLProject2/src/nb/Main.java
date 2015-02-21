@@ -9,15 +9,20 @@ import java.util.HashMap;
 public class Main {
 	public static void main(String[] args) throws IOException {
 		
-		for (int i = 0; i < args.length; i++) {
-	        System.out.println("Argument #" + i + " = " + args[i]);
-	    }
+		String[] arguments=new String[2];
+		int some=0;
+		for(String s:args)
+		{
+			arguments[some]=s;
+			some++;
+		}
 		
-		String trainFolder = "D:/UTD/5thSemester/ML/HW/2/hw2_train/train";
+		String trainFolder = arguments[0];
 		String hamTrainFolder = trainFolder+"/ham";
 		String spamTrainFolder = trainFolder+"/spam";
+		System.out.println(hamTrainFolder + " "+ spamTrainFolder);
 		
-		String testFolder = "D:/UTD/5thSemester/ML/HW/2/hw2_test/test/";
+		String testFolder = arguments[1];
 		String hamTestFolder = testFolder+"/ham";
 		String spamTestFolder = testFolder+"/spam";
 		
