@@ -65,11 +65,11 @@ public class TestClass {
 			summationValue = summationValue + firstVal;
 		}
 		double fullVal = 1 + summationValue;
-		if(fullVal > 0) {
-			//System.out.println("its a SPAM Class");
+		if(fullVal > 0.5) {
+			System.out.println("its a SPAM Class");
 		}
 		else {
-			//System.out.println("Its is a HAM class");
+			System.out.println("Its is a HAM class");
 		}
 	}
 }

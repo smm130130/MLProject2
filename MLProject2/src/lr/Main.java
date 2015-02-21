@@ -5,11 +5,21 @@ import java.util.Random;
 public class Main {
 	public static void main(String[] args) {
 		
-		double eta = 0.01;
-		double lambda = 1.5;
-		String hamFolder = "D:/UTD/5thSemester/ML/HW/2/hw2_train/train/ham";
-		String spamFolder = "D:/UTD/5thSemester/ML/HW/2/hw2_train/train/spam";
-		String testFolder = "D:/UTD/5thSemester/ML/HW/2/hw2_test/test";
+		String[] arguments=new String[4];
+		int some=0;
+		for(String s:args)
+		{
+			arguments[some]=s;
+			some++;
+		}
+		
+		double eta = Double.parseDouble(arguments[2]);
+		double lambda = Double.parseDouble(arguments[2]);;
+		String testFolder = arguments[1];
+		String trainFolder = arguments[0];
+
+		String hamFolder = trainFolder+"/ham";
+		String spamFolder = trainFolder+"/spam";
 		
 		BuildMatrix bm = new BuildMatrix();
 		Integer[][] data = bm.buildMatrix(hamFolder, spamFolder);
@@ -32,8 +42,8 @@ public class Main {
 	}
 
 	private static double generateRandomNumber() {
-		double rangeMin=-5;
-		double rangeMax=5;
+		double rangeMin=-1;
+		double rangeMax=1;
 		Random r = new Random();
 		double randomValue = rangeMin + (rangeMax - rangeMin) * r.nextDouble();
 		return randomValue;
